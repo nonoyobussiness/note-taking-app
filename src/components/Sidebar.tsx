@@ -13,7 +13,7 @@ export function Sidebar(){
             <div className="mb-5 ">
                 <Logo className="w-30 h-18 "/>  
             </div>
-            <div className=" mb-5 border-b border-slate-800">
+            <div className=" mb-5 border-b border-slate-700">
 
                 <NavItem label="All Notes" icon= {<HomeIcon></HomeIcon>}  ></NavItem>
                 <NavItem label="Archived Notes" icon={<ArchiveIcon/>} ></NavItem>
