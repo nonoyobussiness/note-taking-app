@@ -17,7 +17,7 @@ export function Editor({note,onChange}:EditorProps){
     }
     return(
         <div className="flex h-full">
-            <div className="flex flex-col p-6 gap-3 w-4/6 border-r border-slate-700 h-full ">
+            <div className="flex flex-col p-6 gap-3 w-[900px] border-r border-slate-700 h-full ">
                 <input className="font-bold text-3xl text-white bg-transparent outline-none" value={note.title} onChange={e => onChange({...note,title:e.target.value})} ></input>
                 <div className="flex flex-col border-b border-slate-700 w-full p-4 gap-4">
                     <div className="flex flex-row gap-3 mx-3 items-center w-60">
