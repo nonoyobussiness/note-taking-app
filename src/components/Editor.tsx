@@ -2,6 +2,7 @@ import type { Note } from "../App";
 import TagIcon from "./../assets/images/icon-tag.svg?react";
 import ArchiveIcon from "./../assets/images/icon-archive.svg?react";
 import DeleteIcon from "./../assets/images/icon-delete.svg?react";
+import ClockIcon from "./../assets/images/icon-clock.svg?react";
 
 type EditorProps = {
     note:Note | null;
@@ -16,17 +17,28 @@ export function Editor({note,onChange}:EditorProps){
     }
     return(
         <div className="flex h-full">
-            <div className="flex flex-col p-6 gap-4 w-4/6 border-r border-slate-700 h-full ">
+            <div className="flex flex-col p-6 gap-3 w-4/6 border-r border-slate-700 h-full ">
                 <input className="font-bold text-3xl text-white bg-transparent outline-none" value={note.title} onChange={e => onChange({...note,title:e.target.value})} ></input>
-                <div className="flex flex-row gap-3 m-3 items-center w-1/4">
-                    <TagIcon className="w-5 h-5 invert" ></TagIcon>
-                    <p className="text-neutral-400" >Tags</p>
-                    <div className="ml-auto ">
-                        {note.tags.map(tag => (
-                            <span key={tag} className="rounded-lg text-white px-2 py-1">{tag}</span>
-                        ))}
+                <div className="flex flex-col border-b border-slate-700 w-full p-4 gap-4">
+
+                    <div className="flex flex-row gap-3 mx-3 items-center w-60">
+                        <TagIcon className="w-5 h-5 invert" ></TagIcon>
+                        <p className="text-neutral-400" >Tags</p>
+                        <div className="ml-auto ">
+                            {note.tags.map(tag => (
+                                <span key={tag} className="rounded-lg text-white px-2 py-1">{tag}</span>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex gap-3 mx-3 items-center w-60 ">
+                            <ClockIcon className="w-5 h-5 invert"></ClockIcon>
+                            <p className="text-neutral-400">Last edited</p>
+                            <div className="ml-auto">
+                                {note.lastEdited}
+                            </div>
                     </div>
                 </div>
+                
                 <textarea value={note.content} className="flex-1 bg-transparent outline-none resize-none font-normal" onChange={e=>onChange({...note,content:e.target.value})} ></textarea>
             </div>
             <div className="flex-1 flex flex-col px-6 py-8 text-white font-semibold gap-4 ">
