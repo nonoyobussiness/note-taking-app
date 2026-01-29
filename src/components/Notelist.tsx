@@ -1,18 +1,19 @@
-import type {Note} from "./../App"
+import type {Note} from "./../App";
 
 type NoteListProps = {
     notes:Note[];
     activeNoteId:string | null;
     onSelect:(id:string)=>void;
+    onCreateNode: () => void;
 };
 
 
-export function Notelist({notes,activeNoteId,onSelect}:NoteListProps){
+export function Notelist({notes,activeNoteId,onSelect,onCreateNode}:NoteListProps){
     return(
         <div className="h-full flex flex-col ">
             
             <div className="h-full pt-2 gap-3 flex flex-col">
-                <button className="bg-blue-600 text-center text-white py-3 px-12 rounded-xl cursor-pointer transition-colors hover:bg-blue-400" >+ Create New Note </button>
+                <button className="bg-blue-600 text-center text-white py-3 px-12 rounded-xl cursor-pointer transition-colors hover:bg-blue-400" onClick={onCreateNode} >+ Create New Note </button>
                 {notes.map(note=>(
                     <NotePreview
                     key={note.id}

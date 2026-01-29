@@ -18,12 +18,20 @@ MySQL
 Prisma
 
 
-## checklist
+## Checklist
 
-- [ ] Add responsiveness according to tab mobile designs
-- [ ] create new page should work
-- [ ] archive note should be added to archive notes page,save note and delete note should work
-- [ ] tags can be updated??
-- [ ] last edited should be updated accurately too
-- [ ] add option for light theme
-- [ ] add settings too 
+### Core Functionality (MUST WORK)
+- [ ] Create new page should work
+- [ ] Save note should work
+- [ ] Delete note should work
+- [ ] Archive note should move to Archive page
+- [ ] Last edited timestamp updates correctly
+
+### Editor Features
+- [ ] Tags can be added/updated
+- [ ] Tags persist per note
+
+### UI / UX
+- [ ] Add responsiveness (tablet + mobile)
+- [ ] Light theme option
+- [ ] Settings dropdown

@@ -5,34 +5,29 @@
   import { Sidebar } from "./components/Sidebar";
 
   export type Note = {
-    id:string;
-    title:string;
-    tags:string[];
-    lastEdited:string;
-    content:string;
+    id:string,
+    title:string,
+    tags:string[],
+    lastEdited:string,
+    content:string,
   };
 
   export default function App() {
-
-    const [notes,setNotes] = useState<Note[]>([
-      {
-        id: "1",
-        title: "React Performance",
-        tags: ["Dev", "React"],
-        lastEdited: "26/10/2025",
-        content: "Memoization, lazy loading, etc..."
-      },
-      {
-        id: "2",
-        title: "Japan Travel Planning",
-        tags: ["Travel", "Personal"],
-        lastEdited: "01/09/2024",
-        content: "Tokyo, Kyoto, Osaka..." 
-      }
-    ]);
+    
+    const [notes,setNotes] = useState<Note[]>([]);
     const [activeNoteId,setActiveNoteId] = useState<string | null>(null);
     const activeNote = notes.find(n => n.id === activeNoteId) ?? null;
-
+    function createNewNote(){
+      const newnote: Note = {
+        id:crypto.randomUUID(),
+        title: "Untitled",
+        content:"",
+        tags:[],
+        lastEdited:new Date().toLocaleString(),
+      };
+      setNotes(prev => [newnote,...prev]);
+      setActiveNoteId(newnote.id);
+    }
 
     return (
       <Layout
@@ -41,7 +36,8 @@
       notelist={<Notelist
         notes={notes}
         activeNoteId = {activeNoteId}
-        onSelect = {setActiveNoteId} />
+        onSelect = {setActiveNoteId}
+        onCreateNode={createNewNote} />
       }
       editor={<Editor note={activeNote} onChange={(updatedNote)=>{
         setNotes(notes=>notes.map(n=>n.id===updatedNote.id ? updatedNote:n));
