@@ -17,6 +17,7 @@
     const [notes,setNotes] = useState<Note[]>([]);
     const [activeNoteId,setActiveNoteId] = useState<string | null>(null);
     const activeNote = notes.find(n => n.id === activeNoteId) ?? null;
+    
     function createNewNote(){
       const newnote: Note = {
         id:crypto.randomUUID(),
@@ -37,7 +38,7 @@
         notes={notes}
         activeNoteId = {activeNoteId}
         onSelect = {setActiveNoteId}
-        onCreateNode={createNewNote} />
+        onCreateNote={createNewNote} />
       }
       editor={<Editor note={activeNote} onChange={(updatedNote)=>{
         setNotes(notes=>notes.map(n=>n.id===updatedNote.id ? updatedNote:n));
