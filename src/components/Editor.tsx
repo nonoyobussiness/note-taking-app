@@ -5,6 +5,7 @@ import DeleteIcon from "./../assets/images/icon-delete.svg?react";
 import ClockIcon from "./../assets/images/icon-clock.svg?react";
 import { TagInput } from "./TagInput";
 import { useState, useEffect } from "react";
+import StatusIcon from "./../assets/images/icon-status.svg?react";
 
 type EditorProps = {
     note: Note | null;
@@ -73,6 +74,12 @@ export function Editor({ note, onChange }: EditorProps) {
                             <TagInput note={draft} onChange={setDraft} />
                         </div>
                     </div>
+                    {draft?.isArchived && 
+                        <div className="flex flex-row gap-3 mx-3 items-center w-[300px]">
+                            <StatusIcon className="w-5 h-5 invert" ></StatusIcon>
+                            <p className="text-neutral-400">Status:</p>
+                            <p className=" text-white" >Archived</p>
+                        </div>}
                     <div className="flex gap-3 mx-3 items-center w-[300px]">
                         <ClockIcon className="w-5 h-5 invert" />
                         <p className="text-neutral-400">Last edited</p>

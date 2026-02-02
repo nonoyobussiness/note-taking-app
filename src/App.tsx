@@ -10,6 +10,7 @@
     tags:string[],
     lastEdited:string,
     content:string,
+    isArchived:boolean,
   };
 
   export default function App() {
@@ -25,14 +26,18 @@
         content:"",
         tags:[],
         lastEdited:new Date().toLocaleString(),
+        isArchived:true,
       };
       setNotes(prev => [newnote,...prev]);
       setActiveNoteId(newnote.id);
     }
+    const allTags = Array.from(
+      new Set(notes.flatMap(note=>note.tags))
+    );
 
     return (
       <Layout
-      sidebar = {<Sidebar/>} 
+      sidebar = {<Sidebar tags={allTags}/>} 
 
       notelist={<Notelist
         notes={notes}
@@ -42,6 +47,6 @@
       }
       editor={<Editor note={activeNote} onChange={(updatedNote)=>{
         setNotes(notes=>notes.map(n=>n.id===updatedNote.id ? updatedNote:n));
-      }} />} />
+      }}  />} />
     )
   }

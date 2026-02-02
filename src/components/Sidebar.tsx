@@ -6,28 +6,25 @@ import TagIcon from "./../assets/images/icon-tag.svg?react";
 import Logo from "./../assets/images/logo.svg?react";
 
 
+type SidebarProps = {
+    tags:string[];
+};
 
-export function Sidebar(){
+export function Sidebar({tags} : SidebarProps){
     return(
         <aside className="h-full p-5">
             <div className="mb-5 ">
                 <Logo className="w-30 h-18 "/>  
             </div>
             <div className=" mb-5 border-b border-slate-700">
-                <NavItem label="All Notes" icon= {<HomeIcon></HomeIcon>}  ></NavItem>
+                <NavItem label="All Notes" active icon= {<HomeIcon></HomeIcon>}  ></NavItem>
                 <NavItem label="Archived Notes" icon={<ArchiveIcon/>} ></NavItem>
             </div>
             <p className="text-neutral-500 m-3">Tags</p>
-            <TagItem label="Cooking" ></TagItem>
-            <TagItem label="Dev" ></TagItem>
-            <TagItem label="Fitness" ></TagItem>
-            <TagItem label="Health" ></TagItem>
-            <TagItem label="Personal" ></TagItem>
-            <TagItem label="React" ></TagItem>
-            <TagItem label="Recipes" ></TagItem>
-            <TagItem label="Shopping" ></TagItem>
-            <TagItem label="Travel" ></TagItem>
-            <TagItem label="TypeScript" ></TagItem>
+
+            {tags.map(t => (
+                <TagItem label = {t} ></TagItem>
+            )) }
         </aside>
     )
 
