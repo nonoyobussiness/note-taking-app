@@ -23,6 +23,10 @@
       setNotes(prevNotes => prevNotes.map(note=>note.id===id ? {
         ...note, isArchived: !note.isArchived, lastEdited: new Date().toLocaleString()} : note))
       }
+    function deleteNote(id:string){
+      setNotes(prevNotes => prevNotes.filter(note => note.id!== id));
+      if(activeNoteId === id) setActiveNoteId(null);
+    }
 
     function createNewNote(){
       const newnote: Note = {
@@ -50,7 +54,7 @@
         onSelect = {setActiveNoteId}
         onCreateNote={createNewNote} />
       }
-      editor={<Editor note={activeNote} toggleArchive={toggleArchive} onChange={(updatedNote)=>{
+      editor={<Editor note={activeNote} toggleArchive={toggleArchive} onDelete = {deleteNote} onChange={(updatedNote)=>{
         setNotes(notes=>notes.map(n=>n.id===updatedNote.id ? updatedNote:n));
       }}  />} />
     )

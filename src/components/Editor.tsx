@@ -12,9 +12,10 @@ type EditorProps = {
     note: Note | null;
     onChange: (note: Note) => void;
     toggleArchive: (id:string) =>void;
+    onDelete: (id:string) => void;
 };
 
-export function Editor({ note, onChange, toggleArchive }: EditorProps) {
+export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps) {
     const [draft, setDraft] = useState<Note | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
@@ -138,7 +139,9 @@ export function Editor({ note, onChange, toggleArchive }: EditorProps) {
                             </>
                         )}
                 </button>
-                <button className="bg-transparent hover:bg-slate-600 border cursor-pointer transition-colors border-slate-600 flex items-center gap-3 rounded-lg px-3 py-4">
+                <button 
+                    onClick={() => onDelete(draft.id)}
+                    className="bg-transparent hover:bg-slate-600 border cursor-pointer transition-colors border-slate-600 flex items-center gap-3 rounded-lg px-3 py-4">
                     <DeleteIcon className="w-6 h-6 invert" />
                     <p>Delete Note</p>
                 </button>
