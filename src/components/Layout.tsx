@@ -15,7 +15,6 @@ export function Layout({sidebar,notelist,editor}:LayoutProps){
                 <header className="pt-9 pb-6 px-8 border-b border-slate-700 flex ">
                     <h1 className="text-3xl text-white font-semibold">All Notes</h1>
                     <div className="flex gap-6 items-center ml-auto w-auto">
-
                         <div className=" border flex items-center border border-slate-700 px-4 py-3 gap-3 rounded-lg w-80   ">
                             <SearchIcon className="w-6 h-6 invert" ></SearchIcon>
                             <input type="text" placeholder="Search by title, content or tags..." className="outline-none bg-transparent w-full text-md " />

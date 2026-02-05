@@ -19,6 +19,11 @@
     const [activeNoteId,setActiveNoteId] = useState<string | null>(null);
     const activeNote = notes.find(n => n.id === activeNoteId) ?? null;
     
+    function toggleArchive(id: string){
+      setNotes(prevNotes => prevNotes.map(note=>note.id===id ? {
+        ...note, isArchived: !note.isArchived, lastEdited: new Date().toLocaleString()} : note))
+      }
+
     function createNewNote(){
       const newnote: Note = {
         id:crypto.randomUUID(),
@@ -26,7 +31,7 @@
         content:"",
         tags:[],
         lastEdited:new Date().toLocaleString(),
-        isArchived:true,
+        isArchived:false,
       };
       setNotes(prev => [newnote,...prev]);
       setActiveNoteId(newnote.id);
@@ -45,7 +50,7 @@
         onSelect = {setActiveNoteId}
         onCreateNote={createNewNote} />
       }
-      editor={<Editor note={activeNote} onChange={(updatedNote)=>{
+      editor={<Editor note={activeNote} toggleArchive={toggleArchive} onChange={(updatedNote)=>{
         setNotes(notes=>notes.map(n=>n.id===updatedNote.id ? updatedNote:n));
       }}  />} />
     )

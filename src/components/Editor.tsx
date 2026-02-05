@@ -6,14 +6,16 @@ import ClockIcon from "./../assets/images/icon-clock.svg?react";
 import { TagInput } from "./TagInput";
 import { useState, useEffect } from "react";
 import StatusIcon from "./../assets/images/icon-status.svg?react";
+import RestoreIcon from "./../assets/images/icon-restore.svg?react";
 
 type EditorProps = {
     note: Note | null;
     onChange: (note: Note) => void;
+    toggleArchive: (id:string) =>void;
 };
 
-export function Editor({ note, onChange }: EditorProps) {
-    const [draft, setDraft] = useState<Note | null>(note);
+export function Editor({ note, onChange, toggleArchive }: EditorProps) {
+    const [draft, setDraft] = useState<Note | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
     useEffect(() => {
@@ -21,7 +23,7 @@ export function Editor({ note, onChange }: EditorProps) {
         setHasUnsavedChanges(false);
     }, [note?.id]);
 
-    // Track changes
+    
     useEffect(() => {
         if (!note || !draft) return;
         const changed = 
@@ -69,7 +71,7 @@ export function Editor({ note, onChange }: EditorProps) {
                 <div className="flex flex-col border-b border-slate-700 w-full p-4 gap-4">
                     <div className="flex flex-row gap-3 mx-3 items-center w-[300px]">
                         <TagIcon className="w-5 h-5 invert" />
-                        <p className="text-neutral-400">Tags</p>
+                        <p className="text-neutral-400">Tags:</p>
                         <div className="ml-auto">
                             <TagInput note={draft} onChange={setDraft} />
                         </div>
@@ -78,17 +80,16 @@ export function Editor({ note, onChange }: EditorProps) {
                         <div className="flex flex-row gap-3 mx-3 items-center w-[300px]">
                             <StatusIcon className="w-5 h-5 invert" ></StatusIcon>
                             <p className="text-neutral-400">Status:</p>
-                            <p className=" text-white" >Archived</p>
+                            <p className="text-white">Archived</p>
                         </div>}
                     <div className="flex gap-3 mx-3 items-center w-[300px]">
                         <ClockIcon className="w-5 h-5 invert" />
-                        <p className="text-neutral-400">Last edited</p>
-                        <div className="ml-auto">
+                        <p className="text-neutral-400">Last edited:</p>
+                        <div className="">
                             {draft.lastEdited}
                         </div>
                     </div>
                 </div>
-
                 <textarea
                     value={draft.content}
                     className="bg-transparent border-b border-slate-700 outline-none resize-none p-4 font-normal h-3/4"
@@ -120,9 +121,22 @@ export function Editor({ note, onChange }: EditorProps) {
                 </div>
             </div>
             <div className="flex-1 flex flex-col px-6 py-8 text-white font-semibold gap-4">
-                <button className="bg-transparent hover:bg-slate-600 border border-slate-600 flex items-center gap-3 cursor-pointer transition-colors rounded-lg px-3 py-4">
-                    <ArchiveIcon className="w-6 h-6 invert" />
-                    <p>Archive Note</p>
+                <button
+                    onClick={() => {toggleArchive(draft.id);
+                                    setDraft({ ...draft, isArchived: !draft.isArchived });
+                                }}
+                        className="bg-transparent hover:bg-slate-600 border border-slate-600 flex items-center gap-3 cursor-pointer transition-colors rounded-lg px-3 py-4">
+                        {!draft?.isArchived ? (
+                            <>
+                            <ArchiveIcon className="w-6 h-6 invert" />
+                            <p>Archive Note</p>
+                            </>
+                        ) : (
+                            <>
+                            <RestoreIcon className="w-6 h-6 invert" />
+                            <p>Restore Note</p>
+                            </>
+                        )}
                 </button>
                 <button className="bg-transparent hover:bg-slate-600 border cursor-pointer transition-colors border-slate-600 flex items-center gap-3 rounded-lg px-3 py-4">
                     <DeleteIcon className="w-6 h-6 invert" />
