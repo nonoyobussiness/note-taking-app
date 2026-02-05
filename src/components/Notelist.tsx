@@ -35,7 +35,7 @@ type NotePreviewProps = {
 function NotePreview({note,active,onClick}:NotePreviewProps){
     return(
         <div onClick={onClick} className={`flex flex-col justify-start gap-2 p-3 rounded-lg cursor-pointer transition-colors ${active ? "bg-slate-700" : "hover:bg-slate-700"}`}>
-            <h1 className="text-white font-semibold text-xl">{note.title}</h1>
+            <h1 className="text-white font-semibold text-xl">{note.title === "" ? "untitled" : note.title}</h1>
             <div className="flex flex-wrap gap-1">
                 {note.tags.map(tag => (
                     <span key={tag} className="rounded-lg text-white text-xs bg-neutral-600 px-2 py-1">{tag}</span>

@@ -65,7 +65,7 @@ export function Editor({ note, onChange, toggleArchive }: EditorProps) {
             <div className="flex flex-col p-6 gap-3 w-[900px] border-r border-slate-700 h-full">
                 <input
                     className="font-bold text-3xl text-white bg-transparent outline-none"
-                    value={draft.title}
+                    value= {draft.title==="" ? "" : draft.title}
                     onChange={e => setDraft({ ...draft, title: e.target.value })}
                 />
                 <div className="flex flex-col border-b border-slate-700 w-full p-4 gap-4">

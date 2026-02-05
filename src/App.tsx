@@ -27,7 +27,7 @@
     function createNewNote(){
       const newnote: Note = {
         id:crypto.randomUUID(),
-        title: "Untitled",
+        title: "",
         content:"",
         tags:[],
         lastEdited:new Date().toLocaleString(),
