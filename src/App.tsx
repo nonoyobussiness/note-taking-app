@@ -12,7 +12,6 @@
     content:string,
     isArchived:boolean,
   };
-
   export default function App() {
     
     const [notes,setNotes] = useState<Note[]>([]);
@@ -27,7 +26,6 @@
       setNotes(prevNotes => prevNotes.filter(note => note.id!== id));
       if(activeNoteId === id) setActiveNoteId(null);
     }
-
     function createNewNote(){
       const newnote: Note = {
         id:crypto.randomUUID(),
@@ -43,11 +41,9 @@
     const allTags = Array.from(
       new Set(notes.flatMap(note=>note.tags))
     );
-
     return (
       <Layout
       sidebar = {<Sidebar tags={allTags}/>} 
-
       notelist={<Notelist
         notes={notes}
         activeNoteId = {activeNoteId}
