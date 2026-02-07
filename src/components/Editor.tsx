@@ -126,7 +126,13 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
             </div>
             <div className="flex-1 flex flex-col px-6 py-8 text-white font-semibold gap-4">
                 <button
-                    onClick={() => {setShowArchiveModal(true)}}
+                    onClick={() => {
+                        if(!draft?.isArchived ){
+                            setShowArchiveModal(true)}
+                        else{
+                            toggleArchive(draft.id);
+                            setDraft({ ...draft, isArchived: !draft.isArchived }); }}
+                        }
                         className="bg-transparent hover:bg-slate-600 border border-slate-600 flex items-center gap-3 cursor-pointer transition-colors rounded-lg px-3 py-4">
                         {!draft?.isArchived ? (
                             <>

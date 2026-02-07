@@ -21,7 +21,6 @@ export function Sidebar({tags} : SidebarProps){
                 <NavItem label="Archived Notes" icon={<ArchiveIcon/>} ></NavItem>
             </div>
             <p className="text-neutral-500 m-3">Tags</p>
-
             {tags.map(t => (
                 <TagItem label = {t} ></TagItem>
             )) }
