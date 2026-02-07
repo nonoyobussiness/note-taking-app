@@ -7,6 +7,7 @@ import { TagInput } from "./TagInput";
 import { useState, useEffect } from "react";
 import StatusIcon from "./../assets/images/icon-status.svg?react";
 import RestoreIcon from "./../assets/images/icon-restore.svg?react";
+import Modal from "./Modal";
 
 type EditorProps = {
     note: Note | null;
@@ -18,6 +19,8 @@ type EditorProps = {
 export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps) {
     const [draft, setDraft] = useState<Note | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [showDeleteModal,setShowDeleteModal] = useState(false);
+    const [showArchiveModal,setShowArchiveModal] = useState(false);
 
     useEffect(() => {
         setDraft(note);
@@ -123,9 +126,7 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
             </div>
             <div className="flex-1 flex flex-col px-6 py-8 text-white font-semibold gap-4">
                 <button
-                    onClick={() => {toggleArchive(draft.id);
-                                    setDraft({ ...draft, isArchived: !draft.isArchived });
-                                }}
+                    onClick={() => {setShowArchiveModal(true)}}
                         className="bg-transparent hover:bg-slate-600 border border-slate-600 flex items-center gap-3 cursor-pointer transition-colors rounded-lg px-3 py-4">
                         {!draft?.isArchived ? (
                             <>
@@ -140,12 +141,34 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
                         )}
                 </button>
                 <button 
-                    onClick={() => onDelete(draft.id)}
+                    onClick={() => {setShowDeleteModal(true)}}
                     className="bg-transparent hover:bg-slate-600 border cursor-pointer transition-colors border-slate-600 flex items-center gap-3 rounded-lg px-3 py-4">
                     <DeleteIcon className="w-6 h-6 invert" />
                     <p>Delete Note</p>
                 </button>
             </div>
+            {showDeleteModal && (
+                <Modal title={"Delete Note"} 
+                icon={<DeleteIcon></DeleteIcon>} 
+                confirmText={"Are you sure you want to permanently delete this note? This action cannot be undone."} 
+                buttonType={"Delete"} 
+                onConfirm={() => {onDelete(draft.id);setShowDeleteModal(false)}} 
+                onCancel={()=>{setShowDeleteModal(false)}} >
+                </Modal>
+            )}
+            {showArchiveModal && (
+                <Modal title={"Archive Note"} 
+                icon={<ArchiveIcon></ArchiveIcon>} 
+                confirmText={"Are you sure you want to Archive this note? You can find it in Archived Notes section and restore it anytime."} 
+                buttonType={"Archive"} 
+                onConfirm={() => 
+                    {
+                        toggleArchive(draft.id);
+                        setDraft({ ...draft, isArchived: !draft.isArchived });
+                        setShowArchiveModal(false)}}
+                onCancel={()=>{setShowArchiveModal(false)}} >
+                </Modal>
+            )}
         </div>
     );
 }

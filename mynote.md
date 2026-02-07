@@ -21,15 +21,15 @@ Prisma
 ## Checklist
 
 ### Core Functionality (MUST WORK)
-- [ ] Create new page should work
-- [ ] Save note should work
-- [ ] Delete note should work
+- [x] Create new page should work
+- [x] Save note should work
+- [x] Delete note should work
 - [ ] Archive note should move to Archive page
-- [ ] Last edited timestamp updates correctly
+- [x] Last edited timestamp updates correctly
 
 ### Editor Features
-- [ ] Tags can be added/updated
-- [ ] Tags persist per note
+- [x] Tags can be added/updated
+- [x] Tags persist per note
 
 ### UI / UX
 - [ ] Add responsiveness (tablet + mobile)
