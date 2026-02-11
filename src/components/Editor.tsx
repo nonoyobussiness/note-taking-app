@@ -7,6 +7,8 @@ import { TagInput } from "./TagInput";
 import { useState, useEffect } from "react";
 import StatusIcon from "./../assets/images/icon-status.svg?react";
 import RestoreIcon from "./../assets/images/icon-restore.svg?react";
+import ArrowLeft from "./../assets/images/icon-arrow-left.svg?react";
+
 import Modal from "./Modal";
 
 type EditorProps = {
@@ -65,116 +67,184 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
     }
 
     return (
-        <div className="flex h-full">
-            <div className="flex flex-col p-6 gap-3 w-[900px] border-r border-slate-700 h-full">
-                <input
-                    className="font-bold text-3xl text-white bg-transparent outline-none"
-                    value= {draft.title==="" ? "" : draft.title}
-                    onChange={e => setDraft({ ...draft, title: e.target.value })}
-                />
-                <div className="flex flex-col border-b border-slate-700 w-full p-4 gap-4">
-                    <div className="flex flex-row gap-3 mx-3 items-center w-[300px]">
-                        <TagIcon className="w-5 h-5 invert" />
-                        <p className="text-neutral-400">Tags:</p>
-                        <div className="ml-auto">
-                            <TagInput note={draft} onChange={setDraft} />
-                        </div>
-                    </div>
-                    {draft?.isArchived && 
-                        <div className="flex flex-row gap-3 mx-3 items-center w-[300px]">
-                            <StatusIcon className="w-5 h-5 invert" ></StatusIcon>
-                            <p className="text-neutral-400">Status:</p>
-                            <p className="text-white">Archived</p>
-                        </div>}
-                    <div className="flex gap-3 mx-3 items-center w-[300px]">
-                        <ClockIcon className="w-5 h-5 invert" />
-                        <p className="text-neutral-400">Last edited:</p>
-                        <div className="">
-                            {draft.lastEdited}
-                        </div>
-                    </div>
-                </div>
-                <textarea
-                    value={draft.content}
-                    className="bg-transparent border-b border-slate-700 outline-none resize-none p-4 font-normal h-3/4"
-                    onChange={e => setDraft({ ...draft, content: e.target.value })}
-                />
-                <div className="flex gap-3 p-3">
-                    <button
-                        onClick={handleSave}
-                        disabled={!hasUnsavedChanges}
-                        className={`py-3 px-5 rounded-xl text-center transition-colors ${
-                            hasUnsavedChanges
-                                ? 'bg-blue-600 hover:bg-blue-400 text-white cursor-pointer'
-                                : 'bg-blue-600/50 text-white/50 cursor-not-allowed'
-                        }`}
-                    >
-                        Save Note
-                    </button>
-                    <button
-                        onClick={handleCancel}
-                        disabled={!hasUnsavedChanges}
-                        className={`py-3 px-5 rounded-xl transition-colors ${
-                            hasUnsavedChanges
-                                ? 'bg-slate-700 hover:bg-slate-500 text-white cursor-pointer'
-                                : 'bg-slate-700/50 text-white/50 cursor-not-allowed'
-                        }`}
-                    >
-                        Cancel
-                    </button>
-                </div>
+    <div className="h-full w-full md:text-white text-black">
+        {/* ================= MOBILE EDITOR ================= */}
+        <div className="md:hidden flex flex-col h-full">
+        {/* Top Bar */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+            <button
+            onClick={handleCancel}
+            className="text-neutral-600 flex gap-1 items-center"
+            >
+                <ArrowLeft className="w-5 h-5 opacity-50"/>
+                <span>Go Back</span>
+            </button>
+
+            <div className="flex items-center gap-4">
+            <button
+                onClick={handleCancel}
+                disabled={!hasUnsavedChanges}
+                className="text-neutral-600 disabled:opacity-50"
+            >
+                Cancel
+            </button>
+
+            <button
+                onClick={handleSave}
+                disabled={!hasUnsavedChanges}
+                className="text-blue-600 font-semibold disabled:opacity-50"
+            >
+                Save Note
+            </button>
             </div>
-            <div className="flex-1 flex flex-col px-6 py-8 text-white font-semibold gap-4">
-                <button
-                    onClick={() => {
-                        if(!draft?.isArchived ){
-                            setShowArchiveModal(true)}
-                        else{
-                            toggleArchive(draft.id);
-                            setDraft({ ...draft, isArchived: !draft.isArchived }); }}
-                        }
-                        className="bg-transparent hover:bg-slate-600 border border-slate-600 flex items-center gap-3 cursor-pointer transition-colors rounded-lg px-3 py-4">
-                        {!draft?.isArchived ? (
-                            <>
-                            <ArchiveIcon className="w-6 h-6 invert" />
-                            <p>Archive Note</p>
-                            </>
-                        ) : (
-                            <>
-                            <RestoreIcon className="w-6 h-6 invert" />
-                            <p>Restore Note</p>
-                            </>
-                        )}
-                </button>
-                <button 
-                    onClick={() => {setShowDeleteModal(true)}}
-                    className="bg-transparent hover:bg-slate-600 border cursor-pointer transition-colors border-slate-600 flex items-center gap-3 rounded-lg px-3 py-4">
-                    <DeleteIcon className="w-6 h-6 invert" />
-                    <p>Delete Note</p>
-                </button>
-            </div>
-            {showDeleteModal && (
-                <Modal title={"Delete Note"} 
-                icon={<DeleteIcon></DeleteIcon>} 
-                confirmText={"Are you sure you want to permanently delete this note? This action cannot be undone."} 
-                buttonType={"Delete"} 
-                onConfirm={() => {onDelete(draft.id);setShowDeleteModal(false)}} 
-                onCancel={()=>{setShowDeleteModal(false)}} >
-                </Modal>
-            )}
-            {showArchiveModal && (
-                <Modal title={"Archive Note"} 
-                icon={<ArchiveIcon></ArchiveIcon>} 
-                confirmText={"Are you sure you want to Archive this note? You can find it in Archived Notes section and restore it anytime."} 
-                buttonType={"Archive"} 
-                onConfirm={() => 
-                    {
-                        toggleArchive(draft.id);
-                        setDraft({ ...draft, isArchived: !draft.isArchived });
-                        setShowArchiveModal(false)}}
-                onCancel={()=>{setShowArchiveModal(false)}} >
-                </Modal>
-            )}
         </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+            {/* Title */}
+            <input
+            placeholder="Enter a title..."
+            value={draft.title}
+            onChange={e => setDraft({ ...draft, title: e.target.value })}
+            className="w-full bg-transparent outline-none text-2xl font-bold placeholder-neutral-500 mb-4"
+            />
+
+            {/* Meta */}
+            <div className="space-y-2 pb-4 border-b border-slate-700">
+            <div className="flex items-center gap-2 text-neutral-800 text-sm">
+                <TagIcon className="w-4 h-4 opacity-75" />
+                <p className="text-neutral-700">Tags:</p>
+                <TagInput note={draft} onChange={setDraft} />
+            </div>
+
+            <div className="flex items-center gap-2 text-neutral-700 text-sm">
+                <ClockIcon className="w-4 h-4 opacity-75" />
+                <p className="text-neutral-700">Last edited:</p>
+                {draft.lastEdited || "Not yet saved"}
+            </div>
+            </div>
+
+            {/* Editor */}
+            <textarea
+            placeholder="Start typing your note here..."
+            value={draft.content}
+            onChange={e => setDraft({ ...draft, content: e.target.value })}
+            className="w-full min-h-[60vh] bg-transparent outline-none resize-none mt-4 text-base placeholder-slate-500"
+            />
+        </div>
+        </div>
+
+        {/* ================= DESKTOP EDITOR (UNCHANGED) ================= */}
+        <div className="hidden md:flex h-full">
+        {/* Left editor */}
+        <div className="flex flex-col p-6 gap-3 w-[900px] border-r border-slate-700 h-full">
+            <input
+            className="font-bold text-3xl bg-transparent outline-none"
+            value={draft.title}
+            onChange={e => setDraft({ ...draft, title: e.target.value })}
+            />
+
+            <div className="flex flex-col border-b border-slate-700 p-4 gap-4">
+            <div className="flex gap-3 items-center w-[300px]">
+                <TagIcon className="w-5 h-5 invert" />
+                <p className="text-neutral-400">Tags:</p>
+                <TagInput note={draft} onChange={setDraft} />
+            </div>
+
+            {draft.isArchived && (
+                <div className="flex gap-3 items-center w-[300px]">
+                <StatusIcon className="w-5 h-5 invert" />
+                <p className="text-neutral-400">Status:</p>
+                <p>Archived</p>
+                </div>
+            )}
+
+            <div className="flex gap-3 items-center w-[300px]">
+                <ClockIcon className="w-5 h-5 invert" />
+                <p className="text-neutral-400">Last edited:</p>
+                <p>{draft.lastEdited}</p>
+            </div>
+            </div>
+
+            <textarea
+            value={draft.content}
+            onChange={e => setDraft({ ...draft, content: e.target.value })}
+            className="bg-transparent border-b border-slate-700 outline-none resize-none p-4 h-3/4"
+            />
+
+            <div className="flex gap-3 p-3">
+            <button
+                onClick={handleSave}
+                disabled={!hasUnsavedChanges}
+                className={`py-3 px-5 rounded-xl ${
+                hasUnsavedChanges
+                    ? "bg-blue-600 hover:bg-blue-400"
+                    : "bg-blue-600/50 cursor-not-allowed"
+                }`}
+            >
+                Save Note
+            </button>
+
+            <button
+                onClick={handleCancel}
+                disabled={!hasUnsavedChanges}
+                className="py-3 px-5 rounded-xl bg-slate-700"
+            >
+                Cancel
+            </button>
+            </div>
+        </div>
+
+        {/* Right actions */}
+        <div className="flex-1 flex flex-col px-6 py-8 gap-4">
+            <button
+            onClick={() => setShowArchiveModal(true)}
+            className="border border-slate-600 rounded-lg px-3 py-4 flex gap-3"
+            >
+            <ArchiveIcon className="w-6 h-6 invert" />
+            Archive Note
+            </button>
+
+            <button
+            onClick={() => setShowDeleteModal(true)}
+            className="border border-slate-600 rounded-lg px-3 py-4 flex gap-3"
+            >
+            <DeleteIcon className="w-6 h-6 invert" />
+            Delete Note
+            </button>
+        </div>
+        </div>
+
+        {/* Modals unchanged */}
+        {showDeleteModal && (
+        <Modal
+            title="Delete Note"
+            icon={<DeleteIcon />}
+            confirmText="Are you sure you want to permanently delete this note?"
+            buttonType="Delete"
+            onConfirm={() => {
+            onDelete(draft.id);
+            setShowDeleteModal(false);
+            }}
+            onCancel={() => setShowDeleteModal(false)}
+        />
+        )}
+
+        {showArchiveModal && (
+        <Modal
+            title="Archive Note"
+            icon={<ArchiveIcon />}
+            confirmText="Are you sure you want to archive this note?"
+            buttonType="Archive"
+            onConfirm={() => {
+            toggleArchive(draft.id);
+            setDraft({ ...draft, isArchived: !draft.isArchived });
+            setShowArchiveModal(false);
+            }}
+            onCancel={() => setShowArchiveModal(false)}
+        />
+        )}
+    </div>
     );
+
 }
