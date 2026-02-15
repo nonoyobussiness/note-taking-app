@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Editor } from "./components/Editor";
 import { Layout } from "./components/Layout";
 import { Notelist } from "./components/Notelist";
 import { Sidebar } from "./components/Sidebar";
+
+const COLOR_THEME_KEY = "note-app-color-theme";
+const FONT_THEME_KEY = "note-app-font-theme";
+
+export type ColorTheme = "light" | "dark";
+export type FontTheme = "sans" | "serif" | "mono";
 
 export type Note = {
     id: string;
@@ -16,7 +22,24 @@ export type Note = {
 export default function App() {
     const [notes, setNotes] = useState<Note[]>([]);
     const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
+    const [colorTheme, setColorTheme] = useState<ColorTheme>(() =>
+        (localStorage.getItem(COLOR_THEME_KEY) as ColorTheme) ?? "dark"
+    );
+    const [fontTheme, setFontTheme] = useState<FontTheme>(() =>
+        (localStorage.getItem(FONT_THEME_KEY) as FontTheme) ?? "sans"
+    );
     const activeNote = notes.find(n => n.id === activeNoteId) ?? null;
+
+    useEffect(() => {
+        localStorage.setItem(COLOR_THEME_KEY, colorTheme);
+        document.documentElement.classList.toggle("dark", colorTheme === "dark");
+    }, [colorTheme]);
+
+    useEffect(() => {
+        localStorage.setItem(FONT_THEME_KEY, fontTheme);
+        document.body.classList.remove("font-sans", "font-serif", "font-mono");
+        document.body.classList.add(`font-${fontTheme}`);
+    }, [fontTheme]);
 
     function toggleArchive(id: string) {
         setNotes(prevNotes =>
@@ -53,16 +76,26 @@ export default function App() {
     const allTags = Array.from(new Set(notes.flatMap(note => note.tags)));
     
 
+    const archivedNotes = notes.filter(n => n.isArchived);
+
     return (
         <Layout
-            sidebar={<Sidebar tags={allTags} />}
+            colorTheme={colorTheme}
+            setColorTheme={setColorTheme}
+            fontTheme={fontTheme}
+            setFontTheme={setFontTheme}
+            tags={allTags}
+            archivedNotes={archivedNotes}
+            onSelectNote={setActiveNoteId}
+            activeNoteId={activeNoteId}
+            sidebar={<Sidebar tags={allTags} colorTheme={colorTheme} />}
             notelist={
             <Notelist
               notes={notes}
               activeNoteId={activeNoteId}
+              colorTheme={colorTheme}
               onSelect={(id) => {
                 setActiveNoteId(id);
-                // 👇 tell layout to open editor (mobile)
                 window.dispatchEvent(new CustomEvent("open-editor"));
               }}
               onCreateNote={() => {
@@ -74,12 +107,12 @@ export default function App() {
             editor={
                 <Editor
                     note={activeNote}
+                    colorTheme={colorTheme}
                     toggleArchive={toggleArchive}
                     onDelete={deleteNote}
                     onChange={(updatedNote) => {
                         setNotes(notes => notes.map(n => (n.id === updatedNote.id ? updatedNote : n)));
                     }}
-                    
                 />
             }
         />

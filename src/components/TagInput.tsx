@@ -9,9 +9,10 @@ type Props ={
 
 export function TagInput({note, onChange}: Props){
     const [value,setValue]=useState("");
+    /* Only sync from note when switching to a different note; don't overwrite while user is typing (e.g. "react, ") */
     useEffect(() => {
         setValue(note.tags.join(", "));
-        }, [note.id]); 
+    }, [note.id]); 
 
     function updateTags(input:string){
         const tags = input.split(",").map(t=>t.trim()).filter(t=>t!=="");
