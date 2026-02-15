@@ -51,7 +51,7 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
     };
 
     const handleCancel = () => {
-        if (hasUnsavedChanges && !confirm('Discard unsaved changes?')) {
+        if (hasUnsavedChanges) {
             return;
         }
         setDraft(note);
@@ -73,29 +73,47 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
         {/* Top Bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
             <button
-            onClick={handleCancel}
+            onClick={() => {handleCancel; window.dispatchEvent(new CustomEvent("close-editor"));}}
             className="text-neutral-600 flex gap-1 items-center"
             >
                 <ArrowLeft className="w-5 h-5 opacity-50"/>
                 <span>Go Back</span>
             </button>
 
-            <div className="flex items-center gap-4">
-            <button
-                onClick={handleCancel}
-                disabled={!hasUnsavedChanges}
-                className="text-neutral-600 disabled:opacity-50"
-            >
-                Cancel
-            </button>
+            
 
-            <button
-                onClick={handleSave}
-                disabled={!hasUnsavedChanges}
-                className="text-blue-600 font-semibold disabled:opacity-50"
-            >
-                Save Note
-            </button>
+            <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
+                    <button
+                        onClick={() => setShowDeleteModal(true)}
+                        className="w-5 h-5 opacity-50"
+                        >
+                        <DeleteIcon />
+                    </button>
+
+                    <button
+                        onClick={() => setShowArchiveModal(true)}
+                        className="w-5 h-5 opacity-50"
+                        >
+                        {draft.isArchived ? <RestoreIcon /> : <ArchiveIcon />}
+                    </button>
+
+                </div>
+                <button
+                    onClick={() => {handleCancel; window.dispatchEvent(new CustomEvent("close-editor"));}}
+                    disabled={!hasUnsavedChanges}
+                    className="text-neutral-600 disabled:opacity-50"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    onClick={() => {handleSave; window.dispatchEvent(new CustomEvent("close-editor"));}}
+                    disabled={!hasUnsavedChanges}
+                    className="text-blue-600 font-semibold disabled:opacity-50"
+                >
+                    Save Note
+                </button>
             </div>
         </div>
 
@@ -201,9 +219,9 @@ export function Editor({ note, onChange, toggleArchive, onDelete }: EditorProps)
             onClick={() => setShowArchiveModal(true)}
             className="border border-slate-600 rounded-lg px-3 py-4 flex gap-3"
             >
-            <ArchiveIcon className="w-6 h-6 invert" />
-            Archive Note
-            </button>
+            {(!note?.isArchived) ? ( <> <ArchiveIcon className="w-6 h-6 invert" />
+            <span>Archive Note</span> </>) : (<> <RestoreIcon className="w-6 h-6 invert" ></RestoreIcon> <span>Restore</span></>)}
+            </button> 
 
             <button
             onClick={() => setShowDeleteModal(true)}

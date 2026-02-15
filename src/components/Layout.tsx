@@ -27,6 +27,12 @@ export function Layout({ sidebar, notelist, editor }: LayoutProps) {
         window.addEventListener("open-editor", handler);
         return () => window.removeEventListener("open-editor", handler);
     }, []);
+    useEffect(() => {
+        const handler = () => setMobileView("home");
+        window.addEventListener("close-editor", handler);
+        return () => window.removeEventListener("close-editor", handler);
+    }, []);
+
 
 
     return (

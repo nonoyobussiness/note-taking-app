@@ -79,6 +79,7 @@ export default function App() {
                     onChange={(updatedNote) => {
                         setNotes(notes => notes.map(n => (n.id === updatedNote.id ? updatedNote : n)));
                     }}
+                    
                 />
             }
         />
