@@ -11,6 +11,7 @@ import HomeIcon from "./../assets/images/icon-home.svg?react";
 import ArchiveIcon from "./../assets/images/icon-archive.svg?react";
 import TagIcon from "./../assets/images/icon-tag.svg?react";
 import Logo from "./../assets/images/logo.svg?react";
+import { useNavigate } from "react-router-dom";
 
 const iconClass = "icon-theme w-6 h-6";
 
@@ -33,6 +34,7 @@ export function Layout({ sidebar, notelist, editor, colorTheme, setColorTheme, f
     const [openSubMenu, setOpenSubMenu] = useState<"colorTheme" | "textTheme" | null>(null);
     const [mobileSettingsSub, setMobileSettingsSub] = useState<"colorTheme" | "fontTheme" | null>(null);
     const [mobileView, setMobileView] = useState<"home" | "editor" | "search" | "archive" | "tags" | "settings">("home");
+    const navigate = useNavigate();
     useEffect(() => {
         const handler = () => setMobileView("editor");
         window.addEventListener("open-editor", handler);
@@ -43,6 +45,10 @@ export function Layout({ sidebar, notelist, editor, colorTheme, setColorTheme, f
         window.addEventListener("close-editor", handler);
         return () => window.removeEventListener("close-editor", handler);
     }, []);
+
+    const openLogin = () =>{
+        navigate("/login");
+    };
 
 
 
@@ -86,7 +92,7 @@ export function Layout({ sidebar, notelist, editor, colorTheme, setColorTheme, f
                                         <SettingModal isDark={isDark} onHover={() => setOpenSubMenu("colorTheme")} onClick={() => setOpenSubMenu(prev => prev === "colorTheme" ? null : "colorTheme")} hasDropDown icon={<ThemeIcon />} name="Color Theme" />
                                         <SettingModal isDark={isDark} onHover={() => setOpenSubMenu("textTheme")} onClick={() => setOpenSubMenu(prev => prev === "textTheme" ? null : "textTheme")} hasDropDown icon={<FontThemeIcon />} name="Font Theme" />
                                         <SettingModal isDark={isDark} icon={<LockIcon />} name="Change Password" />
-                                        <SettingModal isDark={isDark} className={isDark ? "border-t border-slate-600" : "border-t border-gray-200"} icon={<LogoutIcon />} name="Logout" />
+                                        <SettingModal isDark={isDark} onClick = {openLogin} className={isDark ? "border-t border-slate-600" : "border-t border-gray-200"} icon={<LogoutIcon />} name="Logout" />
                                     </div>
                                     {openSubMenu === "colorTheme" && (
                                         <div
@@ -234,7 +240,7 @@ export function Layout({ sidebar, notelist, editor, colorTheme, setColorTheme, f
                                         <LockIcon className={`${iconClass} w-5 h-5`} />
                                         Change Password
                                     </button>
-                                    <button className={`w-full text-left p-4 rounded-lg flex gap-2 items-center ${isDark ? "bg-red-900/30 text-red-400 hover:bg-red-900/50" : "bg-red-100 text-red-600 hover:bg-red-200"}`}>
+                                    <button onClick={openLogin} className={`w-full text-left p-4 rounded-lg flex gap-2 items-center ${isDark ? "bg-red-900/30 text-red-400 hover:bg-red-900/50" : "bg-red-100 text-red-600 hover:bg-red-200"}`}>
                                         <LogoutIcon className={`${iconClass} w-5 h-5`} />
                                         Logout
                                     </button>
