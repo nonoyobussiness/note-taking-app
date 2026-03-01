@@ -7,4 +7,10 @@ export default defineConfig({
     react(),
     svgr()
   ],
+  server: {
+    proxy: {
+      '/auth': 'http://localhost:5000',
+      '/api': 'http://localhost:5000'
+    }
+  }
 })
